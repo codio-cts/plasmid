@@ -1,10 +1,10 @@
 plugins {
-  id 'fabric-loom' version '0.5-SNAPSHOT'
+  id 'fabric-loom' version '1.6-SNAPSHOT'
   id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -21,13 +21,10 @@ if (build_number) {
   version = "$version+local"
 }
 
-minecraft {
-  accessWidener = file("src/main/resources/plasmid.accesswidener")
-}
-
 repositories {
   maven { url = "https://jitpack.io/" }
   maven { url = "https://maven.nucleoid.xyz/" }
+  maven { url "https://maven.rizecookey.net/" }
 }
 
 dependencies {
@@ -37,9 +34,12 @@ dependencies {
 
   modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
+  /*
   modRuntime("com.github.SuperCoder7979:databreaker:0.2.6") {
     exclude module: "fabric-loader"
   }
+
+   */
 
   modImplementation include('fr.catcore:server-translations-api:1.4.1')
   modImplementation include('xyz.nucleoid:packet-tweaker:0.1.2')
@@ -55,53 +55,38 @@ dependencies {
 
 processResources {
   inputs.property "version", project.version
+  filteringCharset "UTF-8"
 
-  from(sourceSets.main.resources.srcDirs) {
-    include "fabric.mod.json"
+  filesMatching("fabric.mod.json") {
     expand "version": project.version
   }
-
-  from(sourceSets.main.resources.srcDirs) {
-    exclude "fabric.mod.json"
-  }
 }
 
-tasks.withType(JavaCompile) {
-  options.encoding = "UTF-8"
+loom {
+  accessWidenerPath = file("src/main/resources/plasmid.accesswidener")
+  customMinecraftManifest = "https://gist.githubusercontent.com/rizecookey/4c6142baaccc3875f9b227fe22f2ace5/raw/c8ed74b19f7a5315813c9d4b199798b692a8f359/1.16_combat-6.json"
+
+  intermediaryUrl = "https://maven.rizecookey.net/net/fabricmc/intermediary/%1\$s/intermediary-%1\$s-v2.jar"
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-  classifier = "sources"
-  from sourceSets.main.allSource
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+def targetJavaVersion = 21
+tasks.withType(JavaCompile).configureEach {
+  it.options.encoding = "UTF-8"
+
+  // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+  it.options.release = targetJavaVersion
+}
+
+java {
+  withSourcesJar()
+
+  sourceCompatibility = JavaVersion.VERSION_21
+  targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
   from "LICENSE"
-}
-
-publishing {
-  publications {
-    mavenJava(MavenPublication) {
-      artifact(remapJar) {
-        builtBy remapJar
-      }
-      artifact(sourcesJar) {
-        builtBy remapSourcesJar
-      }
-    }
-  }
-
-  repositories {
-    if (env.MAVEN_URL) {
-      maven {
-        credentials {
-          username env.MAVEN_USERNAME
-          password env.MAVEN_PASSWORD
-        }
-        url env.MAVEN_URL
-      }
-    } else {
-      mavenLocal()
-    }
-  }
 }

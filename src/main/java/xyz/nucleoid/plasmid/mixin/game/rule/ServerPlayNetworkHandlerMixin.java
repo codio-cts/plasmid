@@ -3,9 +3,9 @@ package xyz.nucleoid.plasmid.mixin.game.rule;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
-import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
+import net.minecraft.network.packet.c2s.play.ClickWindowC2SPacket;
+import net.minecraft.network.packet.c2s.play.ConfirmGuiActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.network.packet.s2c.play.ConfirmScreenActionS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
@@ -57,7 +57,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
     }
 
     @Inject(
-            method = "onClickSlot",
+            method = "onClickWindow",
             cancellable = true,
             at = @At(
                     value = "INVOKE",
@@ -65,7 +65,7 @@ public abstract class ServerPlayNetworkHandlerMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void onClickSlot(ClickSlotC2SPacket packet, CallbackInfo ci) {
+    private void onClickSlot(ClickWindowC2SPacket packet, CallbackInfo ci) {
         ManagedGameSpace gameSpace = ManagedGameSpace.forWorld(this.player.world);
 
         if (gameSpace != null) {
@@ -89,9 +89,9 @@ public abstract class ServerPlayNetworkHandlerMixin {
                 }
 
                 this.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(packet.getSyncId(), packet.getSlot(), stack));
-                this.player.refreshScreenHandler(this.player.currentScreenHandler);
+                this.player.currentScreenHandler.sendContentUpdates();
                 this.sendPacket(new ScreenHandlerSlotUpdateS2CPacket(-1, -1, this.player.inventory.getCursorStack()));
-                this.sendPacket(new ConfirmScreenActionS2CPacket(packet.getSyncId(), packet.getActionId(), false));
+                this.sendPacket(new ConfirmGuiActionC2SPacket(packet.getSyncId(), packet.getActionId(), false));
             }
         }
     }
