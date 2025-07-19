@@ -11,6 +11,7 @@ import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -66,6 +67,7 @@ public abstract class PlayerManagerMixin {
         }
     }
 
+    @Unique
     private boolean isTeamChatAllowed(ServerPlayerEntity sender) {
         if (sender.getScoreboardTeam() == null) {
             return false;
@@ -75,6 +77,7 @@ public abstract class PlayerManagerMixin {
         return gameSpace != null && gameSpace.testRule(GameRule.TEAM_CHAT) == RuleResult.ALLOW;
     }
 
+    @Unique
     private void sendTeamChat(Text message, ServerPlayerEntity sender) {
         Team team = (Team) sender.getScoreboardTeam();
         UUID senderUuid = sender.getUuid();

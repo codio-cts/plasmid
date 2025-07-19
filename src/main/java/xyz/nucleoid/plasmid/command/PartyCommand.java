@@ -55,15 +55,15 @@ public final class PartyCommand {
     }
 
     private static Text displayError(PartyError error, String player) {
-        switch (error) {
-            case DOES_NOT_EXIST: return new TranslatableText("text.plasmid.party.error.does_not_exist");
-            case ALREADY_INVITED: return new TranslatableText("text.plasmid.party.error.already_invited", player);
-            case ALREADY_IN_PARTY: return new TranslatableText("text.plasmid.party.error.already_in_party");
-            case CANNOT_REMOVE_SELF: return new TranslatableText("text.plasmid.party.error.cannot_remove_self");
-            case NOT_IN_PARTY: return new TranslatableText("text.plasmid.party.error.not_in_party", player);
-            case NOT_INVITED: return new TranslatableText("text.plasmid.party.error.not_invited");
-            default: throw new UnsupportedOperationException();
-        }
+        return switch (error) {
+            case DOES_NOT_EXIST -> new TranslatableText("text.plasmid.party.error.does_not_exist");
+            case ALREADY_INVITED -> new TranslatableText("text.plasmid.party.error.already_invited", player);
+            case ALREADY_IN_PARTY -> new TranslatableText("text.plasmid.party.error.already_in_party");
+            case CANNOT_REMOVE_SELF -> new TranslatableText("text.plasmid.party.error.cannot_remove_self");
+            case NOT_IN_PARTY -> new TranslatableText("text.plasmid.party.error.not_in_party", player);
+            case NOT_INVITED -> new TranslatableText("text.plasmid.party.error.not_invited");
+            default -> throw new UnsupportedOperationException();
+        };
     }
 
     private static int invitePlayer(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {

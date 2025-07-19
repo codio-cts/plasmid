@@ -3,6 +3,7 @@ package xyz.nucleoid.plasmid.mixin.custom;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.CompoundTag;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -10,6 +11,7 @@ import xyz.nucleoid.plasmid.entity.NonPersistentEntity;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements NonPersistentEntity {
+    @Unique
     private boolean nonPersistent;
 
     @Override

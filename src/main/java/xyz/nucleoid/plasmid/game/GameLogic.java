@@ -93,7 +93,7 @@ public final class GameLogic {
     /**
      * Adds a resource to this {@link GameLogic} object that will be automatically closed when the {@link GameLogic}
      * instance is changed on the parent {@link GameSpace}.
-     *
+     * <p>
      * This differs from {@link GameSpace#addResource(AutoCloseable)}, which will be closed when the {@link GameSpace}
      * itself is closed.
      *

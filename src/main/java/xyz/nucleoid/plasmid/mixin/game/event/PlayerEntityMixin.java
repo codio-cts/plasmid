@@ -58,7 +58,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             return;
         }
 
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) (Object) player;
+        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 
         ManagedGameSpace gameSpace = ManagedGameSpace.forWorld(serverPlayer.world);
         if (gameSpace != null && gameSpace.containsPlayer(serverPlayer)) {

@@ -17,29 +17,7 @@ import xyz.nucleoid.plasmid.game.event.PlayerRegenerateListener;
 
 @Mixin(HungerManager.class)
 public class HungerManagerMixin {
-    @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;heal(F)V", shift = At.Shift.BEFORE, ordinal = 0), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
-    private void attemptRegeneration(PlayerEntity player, CallbackInfo ci, Difficulty difficulty, boolean naturalRegeneration, float amount) {
-        if (player.world.isClient) {
-            return;
-        }
-
-        ServerPlayerEntity serverPlayer = (ServerPlayerEntity) (Object) player;
-
-        ManagedGameSpace gameSpace = ManagedGameSpace.forWorld(serverPlayer.world);
-        if (gameSpace != null && gameSpace.containsPlayer(serverPlayer)) {
-            try {
-                ActionResult result = gameSpace.invoker(PlayerRegenerateListener.EVENT).onRegenerate(serverPlayer, amount);
-                if (result == ActionResult.FAIL) {
-                    ci.cancel();
-                }
-            } catch (Throwable t) {
-                Plasmid.LOGGER.error("An unexpected exception occurred while dispatching player regenerate event", t);
-                gameSpace.reportError(t, "Player regenerating");
-            }
-        }
-    }
-
-    @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;heal(F)V", shift = At.Shift.BEFORE, ordinal = 1), cancellable = true)
+    @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;heal(F)V", shift = At.Shift.BEFORE, ordinal = 0), cancellable = true)
     private void attemptSecondaryRegeneration(PlayerEntity player, CallbackInfo ci) {
         if (player.world.isClient) {
             return;

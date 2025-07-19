@@ -10,17 +10,6 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-def env = System.getenv()
-
-def build_number = env.BUILDNUM_FOR_VERSION
-
-// check if we're in actions environment
-if (build_number) {
-  version = "$version.$build_number"
-} else {
-  version = "$version+local"
-}
-
 repositories {
   maven { url = "https://jitpack.io/" }
   maven { url = "https://maven.nucleoid.xyz/" }
@@ -44,7 +33,7 @@ dependencies {
   modImplementation include('fr.catcore:server-translations-api:1.4.1')
   modImplementation include('xyz.nucleoid:packet-tweaker:0.1.2')
   modImplementation include('xyz.nucleoid:fantasy:0.2.8')
-  modImplementation include('xyz.nucleoid:more-codecs:0.1.3')
+  modImplementation include('xyz.nucleoid:more-codecs:0.2.0')
 
   modImplementation 'xyz.nucleoid:leukocyte:0.1.3'
 

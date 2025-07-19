@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,8 +29,11 @@ public abstract class EntityMixin implements GameChannelInterface {
     @Shadow
     public abstract Vec3d getPos();
 
+    @Unique
     private FloatingText display;
+    @Unique
     private GameChannel channel;
+    @Unique
     private Identifier loadedChannel;
 
     @Override
@@ -72,6 +76,7 @@ public abstract class EntityMixin implements GameChannelInterface {
         }
     }
 
+    @Unique
     private FloatingText createDisplay() {
         if (this.display == null) {
             Vec3d anchor = this.getDisplayAnchor();
@@ -80,10 +85,12 @@ public abstract class EntityMixin implements GameChannelInterface {
         return this.display;
     }
 
+    @Unique
     private Vec3d getDisplayAnchor() {
         return this.getPos().add(0.0, CompatibilityUtil.getClientEntityHeight((Entity) (Object) this), 0.0);
     }
 
+    @Unique
     private void removeDisplay() {
         if (this.display != null) {
             this.display.remove();

@@ -47,6 +47,8 @@ public final class PlayerRef {
         return this.id;
     }
 
+    public UUID id() { return this.id; }
+
     public void ifOnline(ServerWorld world, Consumer<ServerPlayerEntity> consumer) {
         ServerPlayerEntity player = this.getEntity(world);
         if (player != null) {

@@ -21,8 +21,7 @@ import xyz.nucleoid.plasmid.game.rule.RuleResult;
 public class FlowableFluidMixin {
     @Inject(method = "canFlow", at = @At("RETURN"), cancellable = true)
     private void applyFluidFlowGameRule(BlockView blockView, BlockPos fluidPos, BlockState fluidBlockState, Direction flowDirection, BlockPos flowTo, BlockState flowToBlockState, FluidState fluidState, Fluid fluid, CallbackInfoReturnable<Boolean> ci) {
-        if (!(blockView instanceof World)) return;
-        World world = (World) blockView;
+        if (!(blockView instanceof World world)) return;
 
         ManagedGameSpace gameSpace = ManagedGameSpace.forWorld(world);
         if (gameSpace != null && gameSpace.testRule(GameRule.FLUID_FLOW) == RuleResult.DENY) {

@@ -159,12 +159,12 @@ public final class SidebarWidget implements GameWidget {
             return this.writeRawLine(new TranslatableText(key, args));
         }
 
-        private Content writeRawLine(Object line) {
+        public Content writeRawLine(Object line) {
             this.lines.push(line);
             return this;
         }
 
-        void flush() {
+        public void flush() {
             MutablePlayerSet players = SidebarWidget.this.players;
 
             int length = this.lines.length;
@@ -223,8 +223,7 @@ public final class SidebarWidget implements GameWidget {
             String text;
             if (line instanceof String) {
                 text = (String) line;
-            } else if (line instanceof Text) {
-                Text txt = (Text) line;
+            } else if (line instanceof Text txt) {
 
                 StringBuilder message = new StringBuilder();
                 Style style = txt.getStyle();
@@ -232,7 +231,7 @@ public final class SidebarWidget implements GameWidget {
                     message.append(Objects.requireNonNull(
                             Formatting.byName(style.getColor().getName()),
                             "formatting"
-                    ).toString());
+                    ));
                 }
                 if (style.isBold()) {
                     message.append(Formatting.BOLD);

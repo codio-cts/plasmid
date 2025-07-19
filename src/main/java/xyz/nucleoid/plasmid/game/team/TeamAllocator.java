@@ -1,4 +1,4 @@
-package xyz.nucleoid.plasmid.game.player;
+package xyz.nucleoid.plasmid.game.team;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.HashMultimap;

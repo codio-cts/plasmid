@@ -17,14 +17,14 @@ public class ServerPlayNetworkHandlerMixin {
 
     /**
      * Fix an inventory desync bug when the player's inventory is updated before network handling but after player ticking.
-     *
+     * <p>
      * To avoid sending updates for predictable inventory actions, vanilla flushes to the tracked client state, treating
      * the existing inventory state as what the client is aware of. This tracked client state is used to update the
      * client when the inventory changes server-side (handled by ScreenHandler#sendContentUpdates).
-     *
+     * <p>
      * This is generally fine, but if the inventory has since changed and those updates have not been sent to the client
      * yet, those updates are consumed and never send to the client.
-     *
+     * <p>
      * Here, we detect and send all inventory updates to the client before processing the slot click to make sure no
      * clicks are lost.
      *
