@@ -11,9 +11,11 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+  flatDir { dirs("libraries") }
+
   maven { url = "https://jitpack.io/" }
   maven { url = "https://maven.nucleoid.xyz/" }
-  maven { url "https://maven.rizecookey.net/" }
+  maven { url = "https://maven.rizecookey.net/" }
 }
 
 dependencies {
@@ -34,6 +36,7 @@ dependencies {
   modImplementation include('xyz.nucleoid:packet-tweaker:0.1.2')
   modImplementation include('xyz.nucleoid:fantasy:0.2.8')
   modImplementation include('xyz.nucleoid:more-codecs:0.2.0')
+  modImplementation include("eu.pb4:sidebar-api:0.1.0-rc.3+${project.minecraft_version}")
 
   modImplementation 'xyz.nucleoid:leukocyte:0.1.3'
 

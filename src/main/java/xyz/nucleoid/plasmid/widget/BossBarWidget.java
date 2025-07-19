@@ -7,6 +7,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import xyz.nucleoid.plasmid.game.GameSpace;
 
+/**
+ * An implementation of {@link GameWidget} which displays a boss bar at the top of players' screens.
+ *
+ * @see ServerBossBar
+ * @see GlobalWidgets
+ */
 public final class BossBarWidget implements GameWidget {
     private final ServerBossBar bar;
 

@@ -2,8 +2,11 @@ package xyz.nucleoid.plasmid.test;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.util.math.BlockPos;
@@ -51,27 +54,27 @@ public final class TestGame {
             game.setRule(GameRule.MODIFY_INVENTORY, RuleResult.DENY);
             game.setRule(GameRule.MODIFY_ARMOR, RuleResult.ALLOW);
 
-            game.on(PlayerDeathListener.EVENT, (player, source) -> {
+            game.listen(PlayerDeathListener.EVENT, (player, source) -> {
                 player.teleport(0.0, 65.0, 0.0);
                 return ActionResult.FAIL;
             });
 
-            GlobalWidgets widgets = new GlobalWidgets(game);
+            GlobalWidgets widgets = GlobalWidgets.addTo(game);
             SidebarWidget sidebar = widgets.addSidebar(new TranslatableText("text.plasmid.test"));
 
             MutableInt timer = new MutableInt();
 
-            game.on(GameTickListener.EVENT, () -> {
+            game.listen(GameTickListener.EVENT, () -> {
                 int time = timer.incrementAndGet();
                 if (time % 20 == 0) {
-                    sidebar.set(content -> {
-                        content.writeLine("Hello World! " + (time / 20) + "s");
-                        content.writeLine("");
-                        content.writeTranslated("text.plasmid.game.started.player", "test");
+                    sidebar.set(b -> {
+                        b.add(new LiteralText("Hello World! " + (time / 20) + "s").setStyle(Style.EMPTY.withColor(Formatting.RED)));
+                        b.add(new LiteralText(""));
+                        b.add(new TranslatableText("text.plasmid.game.started.player", "test"));
                     });
 
-                    GameStatisticBundle statistics = game.getSpace().getStatistics("plasmid-test-game");
-                    for (ServerPlayerEntity player : game.getSpace().getPlayers()) {
+                    GameStatisticBundle statistics = game.getGameSpace().getStatistics("plasmid-test-game");
+                    for (ServerPlayerEntity player : game.getGameSpace().getPlayers()) {
                         statistics.forPlayer(player).increment(TEST_KEY, 2.5);
                     }
                 }
