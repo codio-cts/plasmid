@@ -77,8 +77,10 @@ public final class TeamSelectionLobby {
     }
 
     private void onAddPlayer(ServerPlayerEntity player) {
-        int index = 0;
+        giveItems(player);
+    }
 
+    public void giveItems(ServerPlayerEntity player) {
         for (GameTeam team : this.teams) {
             var config = team.config();
             var name = new TranslatableText("text.plasmid.team_selection.request_team", config.name())
@@ -89,7 +91,7 @@ public final class TeamSelectionLobby {
 
             stack.getOrCreateTag().putString(TEAM_KEY, team.key().id());
 
-            player.inventory.setStack(index++, stack);
+            player.inventory.insertStack(stack);
         }
     }
 
@@ -132,7 +134,6 @@ public final class TeamSelectionLobby {
         for (var entry : Reference2IntMaps.fastIterable(this.maxTeamSize)) {
             allocator.setSizeForTeam(entry.getKey(), entry.getIntValue());
         }
-
         for (var player : this.gameSpace.getPlayers()) {
             GameTeamKey preference = this.teamPreference.get(player.getUuid());
             allocator.add(player, preference);
